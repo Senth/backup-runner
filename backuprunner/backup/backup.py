@@ -40,7 +40,7 @@ class Backup:
     @property
     def filename(self) -> str:
         """Filename to use for the backup"""
-        return f"{self.name} {date_helper.yesterday_str()} {self.part.value}.{self.extension}"
+        return f"{self.name}_{date_helper.yesterday_str()}_{self.part.value}.{self.extension}"
 
     @property
     def filepath(self) -> Path:
