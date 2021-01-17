@@ -22,21 +22,21 @@ class MysqlBackup(Backup):
             out = sys.stdout
 
         config.logger.info("Backing up MySQL")
-        config.logger.debug(
-            f"Username: {config.mysql.username}, password: {config.mysql.password}"
-        )
+
+        args = [
+            "mysqldump",
+            "-u",
+            str(config.mysql.username),
+            "-p",
+            str(config.mysql.password),
+            "-r",
+            str(self.filepath),
+            "--all-databases",
+        ]
+        config.logger.debug(str(args))
 
         run(
-            [
-                "mysqldump",
-                "-u",
-                str(config.mysql.username),
-                "-p",
-                str(config.mysql.password),
-                "-r",
-                self.filepath,
-                "--all-databases",
-            ],
+            args,
             stdout=out,
         )
 
