@@ -31,3 +31,7 @@ class MysqlBackup(Backup):
             ],
             stdout=out,
         )
+
+    @property
+    def extension(self) -> str:
+        return "sql"
