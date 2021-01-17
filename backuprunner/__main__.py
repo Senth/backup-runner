@@ -4,6 +4,7 @@ from typing import List
 from .backup.backup import Backup, remove_old
 from .backup.path_backup import MonthlyBackup, PathBackup, WeeklyBackup
 from .config import config
+import backuprunner.mailer as mailer
 
 
 def main():
@@ -30,7 +31,9 @@ def main():
             MonthlyBackup(config.backup.month_alias, config.backup.month), warnings
         )
 
-    # TODO Mail warnings
+    # Send mail
+    mailer.send_warnings(warnings)
+    mailer.send_if_disk_almost_full()
 
 
 def run_backup(backup: Backup, warnings: List[str]):

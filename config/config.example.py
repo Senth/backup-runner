@@ -71,7 +71,8 @@ BACKUP_DIR = "/mnt/backup"
 # The email to mail warnings about full disk or failed backups.
 # For this to work you have to setup so sendmail on your server.
 # (optional)
-# EMAIL = "your.email@gmail.com"
+# EMAIL_FROM = "this.server@gdomain.com"
+# EMAIL_TO = "your.email@gmail.com"
 
 # When to warn when the backup disk is almost full.
 # By default it warns at 85% full

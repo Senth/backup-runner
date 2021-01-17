@@ -83,7 +83,7 @@ class Config:
         parser = argparse.ArgumentParser()
 
         parser.add_argument(
-            "--full-run", action="store_true", help="Force a full backup run."
+            "--full-backup", action="store_true", help="Force a full backup run."
         )
         parser.add_argument(
             "-v",
@@ -174,7 +174,12 @@ class Config:
 
         # Warning
         try:
-            self.warning.email = _user_config.EMAIL
+            self.warning.email_to = _user_config.EMAIL_TO
+        except AttributeError:
+            pass
+
+        try:
+            self.warning.email_from = _user_config.EMAIL_FROM
         except AttributeError:
             pass
 
@@ -250,7 +255,8 @@ class Mysql:
 
 class Warning:
     def __init__(self) -> None:
-        self.email: Union[str, None] = None
+        self.email_to: Union[str, None] = None
+        self.email_from: Union[str, None] = None
         self.disk_percentage: int = 85
 
 
