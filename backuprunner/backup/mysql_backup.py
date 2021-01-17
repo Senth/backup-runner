@@ -27,7 +27,7 @@ class MysqlBackup(Backup):
                 str(config.mysql.password),
                 "-r",
                 self.filepath,
-                "--all-databeses",
+                "--all-databases",
             ],
             stdout=out,
         )
