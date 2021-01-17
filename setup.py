@@ -8,7 +8,7 @@ project_slug = "backup-runner"
 
 setup(
     name=project_slug,
-    version="0.0.1",
+    version="0.0.2",
     url="https://github.com/Senth/backup-runner",
     license="MIT",
     author="Matteus Magnusson",
