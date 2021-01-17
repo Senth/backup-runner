@@ -67,7 +67,6 @@ class Config:
         # Default values
         self.app_name: str = _app_name
         self.logger: logging.Logger
-        self.full_backup: bool
         self.debug: bool
         self.verbose: bool
         self.backup = Backup()
@@ -107,7 +106,7 @@ class Config:
         Args:
             args (list): All the parsed arguments
         """
-        self.full_backup = args.full_backup
+        self.backup.full = args.full_backup
         self.verbose = args.verbose
         self.debug = args.debug
 
@@ -231,6 +230,7 @@ class Config:
 class Backup:
     def __init__(self) -> None:
         self.dir: str
+        self.full: bool
         self.days_to_keep: int = 65
         self.day: List[str] = []
         self.day_alias: str = "daily"
