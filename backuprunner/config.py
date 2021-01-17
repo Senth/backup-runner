@@ -1,7 +1,7 @@
 from os import path, makedirs
 from platform import system
 from tempfile import gettempdir
-from typing import Any, Union
+from typing import Any, List, Union
 import sys
 import site
 import importlib.util
@@ -67,8 +67,12 @@ class Config:
         # Default values
         self.app_name: str = _app_name
         self.logger: logging.Logger
+        self.full_backup: bool
         self.debug: bool
         self.verbose: bool
+        self.backup = Backup()
+        self.mysql = Mysql()
+        self.warning = Warning()
 
         self._get_optional_variables()
         self._check_required_variables()
@@ -79,6 +83,9 @@ class Config:
         """Parse arguments from command line"""
         parser = argparse.ArgumentParser()
 
+        parser.add_argument(
+            "--full-run", action="store_true", help="Force a full backup run."
+        )
         parser.add_argument(
             "-v",
             "--verbose",
@@ -100,6 +107,7 @@ class Config:
         Args:
             args (list): All the parsed arguments
         """
+        self.full_backup = args.full_backup
         self.verbose = args.verbose
         self.debug = args.debug
 
@@ -108,17 +116,80 @@ class Config:
 
     def _get_optional_variables(self):
         """Get optional values from the config file"""
-        # try:
-        #     self.log_dir = _user_config.LOG_DIR
-        # except AttributeError:
-        #     pass
+        # Backup
+        try:
+            self.backup.days_to_keep = _user_config.DAYS_TO_KEEP
+        except AttributeError:
+            pass
+
+        try:
+            self.backup.day = _user_config.DAILY_FULL
+        except AttributeError:
+            pass
+
+        try:
+            self.backup.day_alias = _user_config.DAILY_ALIAS
+        except AttributeError:
+            pass
+
+        try:
+            self.backup.week = _user_config.WEEKLY_FULL
+        except AttributeError:
+            pass
+
+        try:
+            self.backup.week_alias = _user_config.WEEKLY_ALIAS
+        except AttributeError:
+            pass
+
+        try:
+            self.backup.month = _user_config.MONTHLY_FULL
+        except AttributeError:
+            pass
+
+        try:
+            self.backup.month_alias = _user_config.MONTHLY_ALIAS
+        except AttributeError:
+            pass
+
+        # Mysql
+        try:
+            self.mysql.username = _user_config.MYSQL_USERNAME
+        except AttributeError:
+            pass
+
+        try:
+            self.mysql.password = _user_config.MYSQL_PASSWORD
+        except AttributeError:
+            pass
+
+        try:
+            self.mysql.address = _user_config.MYSQL_ADDRESS
+        except AttributeError:
+            pass
+
+        try:
+            self.mysql.port = _user_config.MYSQL_PORT
+        except AttributeError:
+            pass
+
+        # Warning
+        try:
+            self.warning.email = _user_config.EMAIL
+        except AttributeError:
+            pass
+
+        try:
+            self.warning.disk_percentage = _user_config.WARN_FULL_PERCENTAGE
+        except AttributeError:
+            pass
 
     def _check_required_variables(self):
         """Check that all required variables are set in the user config file"""
-        # try:
-        #     self.port = _user_config.PORT
-        # except AttributeError:
-        #     _print_missing("PORT")
+        try:
+            self.backup.dir = _user_config.BACKUP_DIR
+        except AttributeError:
+            _print_missing("BACKUP_DIR")
 
     def _init_logger(self):
         os = system()
@@ -155,6 +226,32 @@ class Config:
         self.logger.setLevel(log_level)
         self.logger.addHandler(timed_rotating_handler)
         self.logger.addHandler(stream_handler)
+
+
+class Backup:
+    def __init__(self) -> None:
+        self.dir: str
+        self.days_to_keep: int = 65
+        self.day: List[str] = []
+        self.day_alias: str = "daily"
+        self.week: List[str] = []
+        self.week_alias: str = "weekly"
+        self.month: List[str] = []
+        self.month_alias: str = "month"
+
+
+class Mysql:
+    def __init__(self) -> None:
+        self.username: Union[str, None] = None
+        self.password: Union[str, None] = None
+        self.address: str = "localhost"
+        self.port: int = 3306
+
+
+class Warning:
+    def __init__(self) -> None:
+        self.email: Union[str, None] = None
+        self.disk_percentage: int = 85
 
 
 global config
