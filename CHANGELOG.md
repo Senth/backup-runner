@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Modified diffs only works on files, not entire directories
+- Does not follow symlinks
 
 ### Fixed
 
