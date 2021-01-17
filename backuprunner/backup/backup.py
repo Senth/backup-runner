@@ -2,16 +2,18 @@ from datetime import datetime
 from pathlib import Path
 from enum import Enum
 from os import remove
-
+from ..logger import LogColors, Logger
 from ..config import config
 import backuprunner.date_helper as date_helper
 
 
 def remove_old() -> None:
     """Remove all old backups"""
+    Logger.info("Removing old backups", LogColors.header)
     backup_path = Path(config.backup.dir)
     for backup in backup_path.glob("*"):
         if date_helper.is_backup_old(backup):
+            Logger.info(str(backup), LogColors.removed)
             remove(backup)
 
 

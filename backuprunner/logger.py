@@ -14,6 +14,8 @@ class LogColors:
     bold = "\u001b[1m"
 
     error = red
+    header = bold
+    removed = red
     added = green
 
 

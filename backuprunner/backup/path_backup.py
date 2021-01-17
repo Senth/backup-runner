@@ -4,7 +4,6 @@ from .backup import Backup, BackupParts
 from glob import glob
 import tarfile
 from ..logger import Logger, LogColors
-
 import backuprunner.date_helper as date_helper
 
 
@@ -16,7 +15,7 @@ class PathBackup(Backup):
 
     def run(self) -> None:
         """Add files to tar"""
-        Logger.info(f"Backing up {self.name}")
+        Logger.info(f"Backing up {self.name}", LogColors.header)
 
         # Full backup
         if self.part == BackupParts.full:
