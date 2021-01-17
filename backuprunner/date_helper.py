@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from pathlib import Path
+from .config import config
 
 
 def yesterday_str() -> str:
@@ -30,3 +31,8 @@ def is_today_monday() -> bool:
 
 def day_of_month() -> int:
     return today().day
+
+
+def is_backup_old(file: Path) -> bool:
+    old_date = today() - timedelta(days=config.backup.days_to_keep)
+    return old_date > datetime.fromtimestamp(file.stat().st_ctime)

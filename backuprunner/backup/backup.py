@@ -1,9 +1,18 @@
 from datetime import datetime
 from pathlib import Path
 from enum import Enum
+from os import remove
 
 from ..config import config
 import backuprunner.date_helper as date_helper
+
+
+def remove_old() -> None:
+    """Remove all old backups"""
+    backup_path = Path(config.backup.dir)
+    for backup in backup_path.glob("*"):
+        if date_helper.is_backup_old(backup):
+            remove(backup)
 
 
 class BackupParts(Enum):
@@ -17,7 +26,6 @@ class Backup:
         self.name = name
         self._diff_start: datetime
         self._diff_end: datetime
-        self.part = self._get_part()
         self._calculate_part_diffs()
 
     def run(self) -> None:
@@ -36,6 +44,14 @@ class Backup:
     def filepath(self) -> Path:
         """Full filepath to the backup"""
         return Path(config.backup.dir).joinpath(self.filename)
+
+    @property
+    def part(self) -> BackupParts:
+        # Force full backup
+        if config.backup.full:
+            return BackupParts.full
+        else:
+            return self._get_part()
 
     @property
     def extension(self) -> str:
