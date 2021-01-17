@@ -7,7 +7,7 @@ import backuprunner.date_helper as date_helper
 
 
 class BackupParts(Enum):
-    full = ("full",)
+    full = "full"
     day_diff = "day-diff"
     week_diff = "week-diff"
 
@@ -17,6 +17,7 @@ class Backup:
         self.name = name
         self._diff_start: datetime
         self._diff_end: datetime
+        self.part = self._get_part()
         self._calculate_part_diffs()
 
     def run(self) -> None:
@@ -25,7 +26,6 @@ class Backup:
     def is_modified_within_diff(self, path: Path) -> bool:
         modified_time = date_helper.get_modified_datetime(path)
         return self._diff_start <= modified_time and modified_time <= self._diff_end
-        pass
 
     @property
     def filename(self) -> str:
@@ -38,12 +38,11 @@ class Backup:
         return Path(config.backup.dir).joinpath(self.filename)
 
     @property
-    def part(self) -> BackupParts:
-        return BackupParts.full
-
-    @property
     def extension(self) -> str:
         return ""
+
+    def _get_part(self) -> BackupParts:
+        return BackupParts.full
 
     def _calculate_part_diffs(self) -> None:
         # Day diff

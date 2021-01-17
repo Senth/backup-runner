@@ -22,3 +22,11 @@ def last_week() -> datetime:
 
 def get_modified_datetime(file: Path) -> datetime:
     return datetime.fromtimestamp(file.stat().st_mtime)
+
+
+def is_today_monday() -> bool:
+    return today().weekday() == 0
+
+
+def day_of_month() -> int:
+    return today().day

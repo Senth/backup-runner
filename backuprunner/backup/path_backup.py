@@ -4,6 +4,8 @@ from .backup import Backup, BackupParts
 from glob import glob
 from tarfile import TarFile
 
+import backuprunner.date_helper as date_helper
+
 
 class PathBackup(Backup):
     def __init__(self, name: str, paths: List[str]) -> None:
@@ -39,3 +41,29 @@ class PathBackup(Backup):
     @property
     def extension(self) -> str:
         return "tgz"
+
+
+class WeeklyBackup(PathBackup):
+    def __init__(self, name: str, paths: List[str]) -> None:
+        super().__init__(name, paths)
+
+    def _get_part(self) -> BackupParts:
+        if date_helper.is_today_monday():
+            return BackupParts.full
+        else:
+            return BackupParts.day_diff
+
+
+class MonthlyBackup(PathBackup):
+    def __init__(self, name: str, paths: List[str]) -> None:
+        super().__init__(name, paths)
+
+    def _get_part(self) -> BackupParts:
+        day = date_helper.day_of_month()
+
+        if day == 1:
+            return BackupParts.full
+        elif (day - 1) % 7 == 0:
+            return BackupParts.week_diff
+        else:
+            return BackupParts.day_diff
