@@ -27,13 +27,11 @@ class MysqlBackup(Backup):
             "mysqldump",
             "-u",
             str(config.mysql.username),
-            "-p",
-            str(config.mysql.password),
+            f"--password={config.mysql.password}",
             "-r",
             str(self.filepath),
             "--all-databases",
         ]
-        config.logger.debug(str(args))
 
         run(
             args,
