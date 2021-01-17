@@ -38,8 +38,8 @@ class PathBackup(Backup):
     def _find_diff_files(self, path: Path, level: int):
         log_padding = "  " * level
         # File/Dir has changed
-        if (not path.is_dir() or path.is_symlink()) and self.is_modified_within_diff(
-            path
+        if path.is_symlink() or (
+            not path.is_dir() and self.is_modified_within_diff(path)
         ):
             Logger.debug(f"{log_padding}-> {path}", LogColors.added)
             self.tar.add(path)
