@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.3] -
 
+### Added
+
+- Colored logger
+- Logging capabilities
+
+### Changed
+
+- Modified diffs only works on files, not entire directories
+
 ### Fixed
 
 - MySQL backup extension .sql
