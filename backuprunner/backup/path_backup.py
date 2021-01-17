@@ -3,6 +3,7 @@ from typing import List
 from .backup import Backup, BackupParts
 from glob import glob
 import tarfile
+from ..logger import Logger, LogColors
 
 import backuprunner.date_helper as date_helper
 
@@ -15,28 +16,38 @@ class PathBackup(Backup):
 
     def run(self) -> None:
         """Add files to tar"""
+        Logger.info(f"Backing up {self.name}")
+
         # Full backup
         if self.part == BackupParts.full:
+            Logger.info(f"Full backup")
             for path_glob in self.paths:
+                Logger.info(f"-> {path_glob}")
                 for path in glob(path_glob):
+                    Logger.debug(f"  -> {path}", LogColors.added)
                     self.tar.add(path)
 
         # Diff backup
         else:
-            for path_name in self.paths:
-                for path in glob(path_name):
-                    self._find_diff_files(Path(path))
+            Logger.info("Diff backup")
+            for path_glob in self.paths:
+                Logger.info(f"-> {path_glob}")
+                for path in glob(path_glob):
+                    self._find_diff_files(Path(path), 1)
 
-    def _find_diff_files(self, path: Path):
+    def _find_diff_files(self, path: Path, level: int):
+        log_padding = "  " * level
         # File/Dir has changed
         if self.is_modified_within_diff(path):
+            Logger.debug(f"{log_padding}-> {path}", LogColors.added)
             self.tar.add(path)
         # Check children
         else:
+            Logger.debug(f"{log_padding}-> {path}")
             for child in path.glob("*"):
-                self._find_diff_files(child)
+                self._find_diff_files(child, level + 1)
             for child in path.glob(".*"):
-                self._find_diff_files(child)
+                self._find_diff_files(child, level + 1)
 
     @property
     def extension(self) -> str:

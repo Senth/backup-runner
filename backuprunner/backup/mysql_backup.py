@@ -1,6 +1,7 @@
 from .backup import Backup
 from subprocess import DEVNULL, run
 from ..config import config
+from ..logger import Logger
 import sys
 
 
@@ -11,9 +12,7 @@ class MysqlBackup(Backup):
     def run(self) -> None:
         # Only run if a MySQL username and password has been supplied
         if not config.mysql.username and not config.mysql.password:
-            config.logger.info(
-                "Skipping MySQL backup, no username and password supplied"
-            )
+            Logger.info("Skipping MySQL backup, no username and password supplied")
             return
 
         out = DEVNULL
@@ -21,7 +20,7 @@ class MysqlBackup(Backup):
         if config.debug:
             out = sys.stdout
 
-        config.logger.info("Backing up MySQL")
+        Logger.info("Backing up MySQL")
 
         args = [
             "mysqldump",
@@ -38,7 +37,7 @@ class MysqlBackup(Backup):
             stdout=out,
         )
 
-        config.logger.info("MySQL backup complete!")
+        Logger.info("MySQL backup complete!")
 
     @property
     def extension(self) -> str:
