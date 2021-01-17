@@ -16,9 +16,9 @@ BACKUP_DIR = "/mnt/backup"
 # Makes a daily full backup.
 # (optional)
 # DAILY_FULL = [
-#   /etc,
-#   /usr,
-#   /var,
+#   "/etc",
+#   "/usr",
+#   "/var",
 # ]
 
 # Use an alias for the saved backup (instead of daily_full)
@@ -29,7 +29,7 @@ BACKUP_DIR = "/mnt/backup"
 # Also makes daily diff backups.
 # (optional)
 # WEEKLY_FULL = [
-#   /home,
+#   "/home",
 # ]
 
 # Use an alias for the saved backup (instead of weekly_full)
@@ -40,7 +40,7 @@ BACKUP_DIR = "/mnt/backup"
 # Also makes daily and weekly diff backups.
 # (optional)
 # MONTHLY_FULL = [
-#   /mnt/storage
+#   "/mnt/storage"
 # ]
 
 # Use an alias for the saved backup (instead of monthly_full)
@@ -55,12 +55,12 @@ BACKUP_DIR = "/mnt/backup"
 # MySQL backup username account for taking daily backups of the MySQL server
 # Only works if MYSQL_USERNAME and MYSQL_PASSWORD both are set.
 # (optional)
-# MYSQL_USERNAME = backup_user
-# MYSQL_PASSWORD = sotetc*$+N
+# MYSQL_USERNAME = "backup_user"
+# MYSQL_PASSWORD = "sotetc*$+N"
 
 # Change the default MySQL location which is localhost:3306
 # (optional)
-# MYSQL_ADDRESS = localhost
+# MYSQL_ADDRESS = "localhost"
 # MYSQL_PORT = 3306
 
 
