@@ -1,6 +1,10 @@
 # ————————————————————————————
 #       Backup Locations
 # ————————————————————————————
+# !!! The paths supports use of * and ** !!!
+# /home/username/* -> Includes all files and dirs except those starting with dot .
+# /home/username/.* -> Includes all files and dirs starting with dot .
+# /home/**/*.py -> Includes all python files for all users
 
 # Where the backups should be output to
 BACKUP_DIR = "/mnt/backup"
