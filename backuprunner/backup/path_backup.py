@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List
 from .backup import Backup, BackupParts
 from glob import glob
-from tarfile import TarFile
+import tarfile
 
 import backuprunner.date_helper as date_helper
 
@@ -11,7 +11,7 @@ class PathBackup(Backup):
     def __init__(self, name: str, paths: List[str]) -> None:
         super().__init__(name)
         self.paths = paths
-        self.tar: TarFile = TarFile(self.filepath, mode="w:gz")
+        self.tar = tarfile.open(self.filepath, "w:gz")
 
     def run(self) -> None:
         """Add files to tar"""

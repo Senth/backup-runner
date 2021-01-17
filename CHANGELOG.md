@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - MySQL backup extension .sql
+- Fixed daily, weekly, and monthly backups
 
 ## [0.0.2] - 2021-01-17
 
