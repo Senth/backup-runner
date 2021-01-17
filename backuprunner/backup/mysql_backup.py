@@ -38,6 +38,8 @@ class MysqlBackup(Backup):
             stdout=out,
         )
 
+        config.logger.info("MySQL backup complete!")
+
     @property
     def extension(self) -> str:
         return "sql"
