@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - MySQL backup extension .sql
 - Fixed daily, weekly, and monthly backups
+- Fixed FileNotFoundError when a file/dir is removed while indexing
 
 ## [0.0.2] - 2021-01-17
 

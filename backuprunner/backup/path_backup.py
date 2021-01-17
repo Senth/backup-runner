@@ -38,19 +38,22 @@ class PathBackup(Backup):
     def _find_diff_files(self, path: Path, level: int):
         log_padding = "  " * level
         # File/Dir has changed
-        if path.is_symlink() or (
-            not path.is_dir() and self.is_modified_within_diff(path)
-        ):
-            Logger.debug(f"{log_padding}-> {path}", LogColors.added)
-            self.tar.add(path)
-        # Check children
-        else:
-            Logger.debug(f"{log_padding}-> {path}")
-            if not path.is_symlink():
-                for child in path.glob("*"):
-                    self._find_diff_files(child, level + 1)
-                for child in path.glob(".*"):
-                    self._find_diff_files(child, level + 1)
+        try:
+            if path.is_symlink() or (
+                not path.is_dir() and self.is_modified_within_diff(path)
+            ):
+                Logger.debug(f"{log_padding}-> {path}", LogColors.added)
+                self.tar.add(path)
+            # Check children
+            else:
+                Logger.debug(f"{log_padding}-> {path}")
+                if not path.is_symlink():
+                    for child in path.glob("*"):
+                        self._find_diff_files(child, level + 1)
+                    for child in path.glob(".*"):
+                        self._find_diff_files(child, level + 1)
+        except FileNotFoundError:
+            pass
 
     @property
     def extension(self) -> str:
