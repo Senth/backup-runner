@@ -8,7 +8,7 @@ project_slug = "backup-runner"
 
 setup(
     name=project_slug,
-    version="0.0.2",
+    use_scm_version=True,
     url="https://github.com/Senth/backup-runner",
     license="MIT",
     author="Matteus Magnusson",
@@ -26,5 +26,6 @@ setup(
         "Licence :: OSI Approved :: MIT Licence",
         "Programming Language :: Python :: 3",
     ],
+    setup_requires=["setuptools_scm"],
     python_requires=">=3.8",
 )
