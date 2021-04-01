@@ -23,7 +23,7 @@ setup(
     install_requires=["psutil"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
-        "Licence :: OSI Approved :: MIT Licence",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
     ],
     setup_requires=["setuptools_scm"],
