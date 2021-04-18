@@ -1,8 +1,9 @@
-from .backup import Backup
+import sys
 from subprocess import DEVNULL, run
+
 from ..config import config
 from ..logger import LogColors, Logger
-import sys
+from .backup import Backup
 
 
 class MysqlBackup(Backup):

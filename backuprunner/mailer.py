@@ -1,7 +1,9 @@
+from subprocess import PIPE, Popen
 from typing import List
-from .config import config
-from subprocess import Popen, PIPE
+
 import psutil
+
+from .config import config
 
 _header = f"""to: {config.warning.email_to}
 from: {config.warning.email_from}

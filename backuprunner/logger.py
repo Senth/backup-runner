@@ -1,5 +1,6 @@
-from .config import config
 import sys
+
+from .config import config
 
 _logger = config.logger
 

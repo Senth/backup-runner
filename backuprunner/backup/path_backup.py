@@ -1,10 +1,12 @@
+import tarfile
+from glob import glob
 from pathlib import Path
 from typing import List
-from .backup import Backup, BackupParts
-from glob import glob
-import tarfile
-from ..logger import Logger, LogColors
+
 import backuprunner.date_helper as date_helper
+
+from ..logger import LogColors, Logger
+from .backup import Backup, BackupParts
 
 
 class PathBackup(Backup):

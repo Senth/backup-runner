@@ -1,10 +1,13 @@
 from __future__ import annotations
-from backuprunner.backup.mysql_backup import MysqlBackup
+
 from typing import List
+
+import backuprunner.mailer as mailer
+from backuprunner.backup.mysql_backup import MysqlBackup
+
 from .backup.backup import Backup, remove_old
 from .backup.path_backup import MonthlyBackup, PathBackup, WeeklyBackup
 from .config import config
-import backuprunner.mailer as mailer
 
 
 def main():

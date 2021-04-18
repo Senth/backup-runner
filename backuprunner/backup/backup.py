@@ -1,10 +1,12 @@
 from datetime import datetime
-from pathlib import Path
 from enum import Enum
 from os import remove
-from ..logger import LogColors, Logger
-from ..config import config
+from pathlib import Path
+
 import backuprunner.date_helper as date_helper
+
+from ..config import config
+from ..logger import LogColors, Logger
 
 
 def remove_old() -> None:
