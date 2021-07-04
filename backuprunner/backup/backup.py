@@ -15,7 +15,7 @@ def remove_old() -> None:
     TealPrint.info("Removing old backups", color=attr("bold"))
     backup_path = Path(config.general.backup_location)
     for backup in backup_path.glob("*"):
-        if date_helper.is_backup_old(backup):
+        if backup.is_file() and date_helper.is_backup_old(backup):
             message = f"🔥 {backup}"
             TealPrint.info(message, indent=1)
             remove(backup)
