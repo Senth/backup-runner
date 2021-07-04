@@ -4,18 +4,20 @@ from os import remove
 from pathlib import Path
 
 import backuprunner.date_helper as date_helper
+from colored import attr
+from tealprint import TealPrint
 
 from ..config import config
-from ..logger import LogColors, Logger
 
 
 def remove_old() -> None:
     """Remove all old backups"""
-    Logger.info("Removing old backups", LogColors.header)
+    TealPrint.info("Removing old backups", color=attr("bold"))
     backup_path = Path(config.general.backup_location)
     for backup in backup_path.glob("*"):
         if date_helper.is_backup_old(backup):
-            Logger.info(str(backup), LogColors.removed)
+            message = f"🔥 {backup}"
+            TealPrint.info(message, indent=1)
             remove(backup)
 
 
