@@ -5,20 +5,20 @@ import psutil
 
 from .config import config
 
-_header = f"""to: {config.warning.email_to}
-from: {config.warning.email_from}
+_header = f"""to: {config.email.email_to}
+from: {config.email.email_from}
 content-type: text/html
 """
 
 
 def _send_mail(mail: str) -> None:
-    if config.warning.email_to and config.warning.email_from:
+    if config.email.email_to and config.email.email_from:
         p = Popen(["sendmail", "-t"], stdin=PIPE)
         p.communicate(input=mail.encode(encoding="utf-8"))
 
 
 def send_if_disk_almost_full() -> None:
-    disk = psutil.disk_usage(config.backup.dir)
+    disk = psutil.disk_usage(config.general.backup_location)
 
     mail = _header
     mail += f"""subject: Backup disk almost full! {disk.percent}% USED

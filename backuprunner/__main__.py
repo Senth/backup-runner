@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import List
 
 import backuprunner.mailer as mailer
-from backuprunner.backup.mysql_backup import MysqlBackup
 
 from .backup.backup import Backup, remove_old
+from .backup.mysql_backup import MysqlBackup
 from .backup.path_backup import MonthlyBackup, PathBackup, WeeklyBackup
 from .config import config
 
@@ -21,18 +21,16 @@ def main():
         run_backup(MysqlBackup(), warnings)
 
     # Daily
-    if len(config.backup.day) > 0:
-        run_backup(PathBackup(config.backup.day_alias, config.backup.day), warnings)
+    if len(config.backups.day) > 0:
+        run_backup(PathBackup(config.backups.day_alias, config.backups.day), warnings)
 
     # Weekly
-    if len(config.backup.week) > 0:
-        run_backup(WeeklyBackup(config.backup.week_alias, config.backup.week), warnings)
+    if len(config.backups.week) > 0:
+        run_backup(WeeklyBackup(config.backups.week_alias, config.backups.week), warnings)
 
     # Monthly
-    if len(config.backup.month) > 0:
-        run_backup(
-            MonthlyBackup(config.backup.month_alias, config.backup.month), warnings
-        )
+    if len(config.backups.month) > 0:
+        run_backup(MonthlyBackup(config.backups.month_alias, config.backups.month), warnings)
 
     # Send mail
     mailer.send_warnings(warnings)
@@ -43,7 +41,7 @@ def run_backup(backup: Backup, warnings: List[str]):
     backup.run()
 
     if not backup.filepath.exists():
-        warnings.append(f"Backup {backup.name} failed!  ({backup.filename})")
+        warnings.append(f"Backup {backup.name} failed! ({backup.filename})")
 
 
 if __name__ == "__main__":
