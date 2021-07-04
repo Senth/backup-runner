@@ -8,9 +8,15 @@ from .backup.backup import Backup, remove_old
 from .backup.mysql_backup import MysqlBackup
 from .backup.path_backup import MonthlyBackup, PathBackup, WeeklyBackup
 from .config import config
+from .utils.arg_parser import get_args
+from .utils.config_file_parser import ConfigFileParser
 
 
 def main():
+    config.set_from_cli(get_args())
+    config_parser = ConfigFileParser()
+    config.set_from_config_file(config_parser.get_args())
+
     # Remove old backups
     remove_old()
 
