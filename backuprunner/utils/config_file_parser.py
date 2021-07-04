@@ -4,6 +4,7 @@ from shutil import copy
 from site import getuserbase
 from typing import Any, Callable, Tuple
 
+from colored import attr
 from tealprint import TealPrint
 
 from ..config import config
@@ -24,7 +25,10 @@ class ConfigFileParser:
         config = configparser.ConfigParser()
         config.read(self.path)
 
+        TealPrint.verbose(f"Reading configuration {self.path}", color=attr("bold"))
+
         if "general" in config:
+            TealPrint.debug("[general]", indent=1)
             general = config["general"]
             ConfigFileParser._set_str(
                 args.general,
@@ -32,8 +36,11 @@ class ConfigFileParser:
                 "backup_location",
                 "days_to_keep",
             )
+        else:
+            ConfigFileParser._print_section_not_found("general")
 
         if "backups" in config:
+            TealPrint.debug("[backups]")
             backups = config["backups"]
             ConfigFileParser._set_str_list(
                 args.backups,
@@ -49,6 +56,8 @@ class ConfigFileParser:
                 "weekly_alias",
                 "monthly_alias",
             )
+        else:
+            ConfigFileParser._print_section_not_found("backups")
 
         if "mysql" in config:
             mysql = config["mysql"]
@@ -64,6 +73,8 @@ class ConfigFileParser:
                 mysql,
                 "port",
             )
+        else:
+            ConfigFileParser._print_section_not_found("mysql")
 
         if "email" in config:
             email = config["email"]
@@ -78,8 +89,16 @@ class ConfigFileParser:
                 email,
                 "disk_percentage",
             )
+        else:
+            ConfigFileParser._print_section_not_found("email")
+
+        self._check_required(args)
 
         return args
+
+    @staticmethod
+    def _print_section_not_found(section: str) -> None:
+        TealPrint.warning(f"⚠ [{section}] section not found!", indent=1)
 
     @staticmethod
     def _set_str(args: Any, section: configparser.SectionProxy, *varnames: str) -> None:
