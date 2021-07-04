@@ -19,7 +19,7 @@ class Backups:
         self.daily_alias: str = "daily"
         self.weekly: List[str] = []
         self.weekly_alias: str = "weekly"
-        self.montly: List[str] = []
+        self.monthly: List[str] = []
         self.monthly_alias: str = "monthly"
 
 

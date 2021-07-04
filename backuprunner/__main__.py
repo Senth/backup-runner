@@ -21,16 +21,16 @@ def main():
         run_backup(MysqlBackup(), warnings)
 
     # Daily
-    if len(config.backups.day) > 0:
-        run_backup(PathBackup(config.backups.day_alias, config.backups.day), warnings)
+    if len(config.backups.daily) > 0:
+        run_backup(PathBackup(config.backups.daily_alias, config.backups.daily), warnings)
 
     # Weekly
-    if len(config.backups.week) > 0:
-        run_backup(WeeklyBackup(config.backups.week_alias, config.backups.week), warnings)
+    if len(config.backups.weekly) > 0:
+        run_backup(WeeklyBackup(config.backups.weekly_alias, config.backups.weekly), warnings)
 
     # Monthly
-    if len(config.backups.month) > 0:
-        run_backup(MonthlyBackup(config.backups.month_alias, config.backups.month), warnings)
+    if len(config.backups.monthly) > 0:
+        run_backup(MonthlyBackup(config.backups.monthly_alias, config.backups.monthly), warnings)
 
     # Send mail
     mailer.send_warnings(warnings)
