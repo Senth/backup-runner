@@ -130,7 +130,7 @@ class ConfigFileParser:
 
     @staticmethod
     def _set_int(args: Any, section: configparser.SectionProxy, *varnames: str) -> None:
-        ConfigFileParser._set(args, section.get, *varnames)
+        ConfigFileParser._set(args, section.getint, *varnames)
 
     @staticmethod
     def _set(args: Any, get_func: Callable, *varnames: str) -> None:
