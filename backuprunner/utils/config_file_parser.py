@@ -42,6 +42,10 @@ class ConfigFileParser:
                 args.general,
                 general,
                 "backup_location",
+            )
+            ConfigFileParser._set_int(
+                args.general,
+                general,
                 "days_to_keep",
             )
         else:
