@@ -1,4 +1,5 @@
 import configparser
+from enum import Enum
 from pathlib import Path
 from shutil import copy
 from site import getuserbase
@@ -9,6 +10,13 @@ from tealprint import TealPrint
 
 from ..config import config
 from .config_file_args import ConfigFileArgs
+
+
+class Sections(Enum):
+    general = "General"
+    backups = "Backups"
+    mysql = "MySQL"
+    email = "Email"
 
 
 class ConfigFileParser:
@@ -27,9 +35,9 @@ class ConfigFileParser:
 
         TealPrint.verbose(f"Reading configuration {self.path}", color=attr("bold"))
 
-        if "general" in config:
-            TealPrint.debug("[general]", indent=1)
-            general = config["general"]
+        if Sections.general.value in config:
+            TealPrint.debug(f"[{Sections.general.value}]", indent=1)
+            general = config[Sections.general.value]
             ConfigFileParser._set_str(
                 args.general,
                 general,
@@ -37,11 +45,11 @@ class ConfigFileParser:
                 "days_to_keep",
             )
         else:
-            ConfigFileParser._print_section_not_found("general")
+            ConfigFileParser._print_section_not_found(Sections.general.value)
 
-        if "backups" in config:
-            TealPrint.debug("[backups]")
-            backups = config["backups"]
+        if Sections.backups.value in config:
+            TealPrint.debug(f"[{Sections.backups.value}]")
+            backups = config[Sections.backups.value]
             ConfigFileParser._set_str_list(
                 args.backups,
                 backups,
@@ -57,10 +65,11 @@ class ConfigFileParser:
                 "monthly_alias",
             )
         else:
-            ConfigFileParser._print_section_not_found("backups")
+            ConfigFileParser._print_section_not_found(Sections.backups.value)
 
-        if "mysql" in config:
-            mysql = config["mysql"]
+        if Sections.mysql.value in config:
+            TealPrint.debug(f"[{Sections.mysql.value}]")
+            mysql = config[Sections.mysql.value]
             ConfigFileParser._set_str(
                 args.mysql,
                 mysql,
@@ -74,10 +83,11 @@ class ConfigFileParser:
                 "port",
             )
         else:
-            ConfigFileParser._print_section_not_found("mysql")
+            ConfigFileParser._print_section_not_found(Sections.mysql.value)
 
-        if "email" in config:
-            email = config["email"]
+        if Sections.email.value in config:
+            TealPrint.debug(f"[{Sections.email.value}]")
+            email = config[Sections.email.value]
             ConfigFileParser._set_str(
                 args.email,
                 email,
@@ -90,7 +100,7 @@ class ConfigFileParser:
                 "disk_percentage",
             )
         else:
-            ConfigFileParser._print_section_not_found("email")
+            ConfigFileParser._print_section_not_found(Sections.email.value)
 
         self._check_required(args)
 
