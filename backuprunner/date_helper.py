@@ -35,5 +35,5 @@ def day_of_month() -> int:
 
 
 def is_backup_old(file: Path) -> bool:
-    old_date = today() - timedelta(days=config.backup.days_to_keep)
+    old_date = today() - timedelta(days=config.general.days_to_keep)
     return old_date > datetime.fromtimestamp(file.stat().st_ctime)

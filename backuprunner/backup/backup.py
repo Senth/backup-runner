@@ -12,7 +12,7 @@ from ..logger import LogColors, Logger
 def remove_old() -> None:
     """Remove all old backups"""
     Logger.info("Removing old backups", LogColors.header)
-    backup_path = Path(config.backup.dir)
+    backup_path = Path(config.general.backup_location)
     for backup in backup_path.glob("*"):
         if date_helper.is_backup_old(backup):
             Logger.info(str(backup), LogColors.removed)
@@ -47,12 +47,12 @@ class Backup:
     @property
     def filepath(self) -> Path:
         """Full filepath to the backup"""
-        return Path(config.backup.dir).joinpath(self.filename)
+        return Path(config.general.backup_location).joinpath(self.filename)
 
     @property
     def part(self) -> BackupParts:
         # Force full backup
-        if config.backup.full:
+        if config.force_full:
             return BackupParts.full
         else:
             return self._get_part()

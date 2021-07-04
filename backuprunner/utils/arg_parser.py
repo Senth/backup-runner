@@ -5,6 +5,11 @@ def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
+        "--full-backup",
+        action="store_true",
+        help="Force a full backup run.",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
