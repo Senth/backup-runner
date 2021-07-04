@@ -5,14 +5,14 @@ import psutil
 
 from .config import config
 
-_header = f"""to: {config.email.to}
-from: {config.email.from}
+_header = f"""to: {config.email.to_address}
+from: {config.email.from_address}
 content-type: text/html
 """
 
 
 def _send_mail(mail: str) -> None:
-    if config.email.to and config.email.from:
+    if config.email.to_address and config.email.from_address:
         p = Popen(["sendmail", "-t"], stdin=PIPE)
         p.communicate(input=mail.encode(encoding="utf-8"))
 

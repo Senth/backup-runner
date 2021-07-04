@@ -8,10 +8,12 @@ class ConfigFileArgs:
         self.mysql = Mysql()
         self.email = Email()
 
+
 class General:
     def __init__(self) -> None:
         self.backup_location: str = ""
         self.days_to_keep: int = 65
+
 
 class Backups:
     def __init__(self) -> None:
@@ -33,6 +35,6 @@ class Mysql:
 
 class Email:
     def __init__(self) -> None:
-        self.to: Optional[str] = None
-        self.from: Optional[str] = None
+        self.to_address: Optional[str] = None
+        self.from_address: Optional[str] = None
         self.disk_percentage: int = 85

@@ -2,7 +2,7 @@ import configparser
 from pathlib import Path
 from shutil import copy
 from site import getuserbase
-from typing import Any
+from typing import Any, Callable, Tuple
 
 from tealprint import TealPrint
 
@@ -70,8 +70,8 @@ class ConfigFileParser:
             ConfigFileParser._set_str(
                 args.email,
                 email,
-                "to",
-                "from",
+                "to->to_address",
+                "from->from_address",
             )
             ConfigFileParser._set_int(
                 args.email,
@@ -83,33 +83,36 @@ class ConfigFileParser:
 
     @staticmethod
     def _set_str(args: Any, section: configparser.SectionProxy, *varnames: str) -> None:
-        for varname in varnames:
-            default = getattr(args, varname)
-            value = section.get(varname, fallback=default)
-            setattr(args, varname, value)
+        ConfigFileParser._set(args, section.get, *varnames)
 
     @staticmethod
     def _set_str_list(args: Any, section: configparser.SectionProxy, *varnames: str) -> None:
         for varname in varnames:
-            values = getattr(args, varname)
-            value = section.get(varname, fallback="")
+            conf_varname, arg_varname = ConfigFileParser._get_config_and_arg_names(varname)
+            values = getattr(args, arg_varname)
+            value = section.get(conf_varname, fallback="")
             if value != "":
                 values = value.split("\n")
-            setattr(args, varname, values)
+            setattr(args, arg_varname, values)
 
     @staticmethod
     def _set_int(args: Any, section: configparser.SectionProxy, *varnames: str) -> None:
-        for varname in varnames:
-            default = getattr(args, varname)
-            value = section.getint(varname, fallback=default)
-            setattr(args, varname, value)
+        ConfigFileParser._set(args, section.get, *varnames)
 
     @staticmethod
-    def _read_from_config(config: configparser.SectionProxy, varname: str) -> Any:
-        varname = varname.lower()
-        if varname in config:
-            return config[varname]
-        return None
+    def _set(args: Any, get_func: Callable, *varnames: str) -> None:
+        for varname in varnames:
+            conf_varname, arg_varname = ConfigFileParser._get_config_and_arg_names(varname)
+            default = getattr(args, arg_varname)
+            value = get_func(conf_varname, fallback=default)
+            setattr(args, arg_varname, value)
+
+    @staticmethod
+    def _get_config_and_arg_names(varname: str) -> Tuple[str, str]:
+        split = varname.split("->")
+        if len(split) == 2:
+            return (split[0], split[1])
+        return (split[0], split[0])
 
     def _check_required(self, args: ConfigFileArgs) -> None:
         if len(args.general.backup_location) == 0:
