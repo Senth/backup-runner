@@ -19,7 +19,7 @@ setup(
     packages=[module_name],
     entry_points={"console_scripts": [f"{project_slug}={module_name}.__main__:main"]},
     include_package_data=True,
-    data_files=[(f"config/{project_slug}", ["config/config.example.py"])],
+    data_files=[(f"config/{project_slug}", [f"config/{project_slug}-example.cfg"])],
     install_requires=["psutil"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
