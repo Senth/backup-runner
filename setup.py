@@ -20,7 +20,7 @@ setup(
     entry_points={"console_scripts": [f"{project_slug}={module_name}.__main__:main"]},
     include_package_data=True,
     data_files=[(f"config/{project_slug}", [f"config/{project_slug}-example.cfg"])],
-    install_requires=["psutil"],
+    install_requires=["psutil", "tealprint"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
