@@ -24,7 +24,9 @@ setup(
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3",
+        "Environment :: Console",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     setup_requires=["setuptools_scm"],
     python_requires=">=3.8",
