@@ -1,8 +1,10 @@
 import sys
 from subprocess import DEVNULL, run
 
+from colored import attr, fg
+from tealprint import TealLevel, TealPrint
+
 from ..config import config
-from ..logger import LogColors, Logger
 from .backup import Backup
 
 
@@ -13,18 +15,18 @@ class MysqlBackup(Backup):
     def run(self) -> None:
         # Only run if a MySQL username and password has been supplied
         if not config.mysql.username and not config.mysql.password:
-            Logger.info(
+            TealPrint.info(
                 "Skipping MySQL backup, no username and password supplied",
-                LogColors.header,
+                color=fg("yellow"),
             )
             return
 
         out = DEVNULL
 
-        if config.debug:
+        if config.level == TealLevel.debug:
             out = sys.stdout
 
-        Logger.info("Backing up MySQL", LogColors.header)
+        TealPrint.info("Backing up MySQL", color=attr("bold"))
 
         args = [
             "mysqldump",
@@ -41,7 +43,7 @@ class MysqlBackup(Backup):
             stdout=out,
         )
 
-        Logger.info("MySQL backup complete!")
+        TealPrint.info("✔ MySQL backup complete!")
 
     @property
     def extension(self) -> str:

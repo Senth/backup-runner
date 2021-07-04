@@ -4,8 +4,9 @@ from pathlib import Path
 from typing import List
 
 import backuprunner.date_helper as date_helper
+from colored import attr
+from tealprint import TealPrint
 
-from ..logger import LogColors, Logger
 from .backup import Backup, BackupParts
 
 
@@ -17,43 +18,40 @@ class PathBackup(Backup):
 
     def run(self) -> None:
         """Add files to tar"""
-        Logger.info(f"Backing up {self.name}", LogColors.header)
+        TealPrint.info(f"Backing up {self.name}", color=attr("bold"))
 
         # Full backup
         if self.part == BackupParts.full:
-            Logger.info(f"Full backup")
+            TealPrint.info(f"Doing a full backup", indent=1)
             for path_glob in self.paths:
-                Logger.info(f"-> {path_glob}")
+                TealPrint.verbose(f"{path_glob}", indent=2)
                 for path in glob(path_glob):
-                    Logger.debug(f"  -> {path}", LogColors.added)
+                    TealPrint.debug(f"{path}", indent=3)
                     self.tar.add(path)
 
         # Diff backup
         else:
-            Logger.info("Diff backup")
+            TealPrint.info("Doing a diff backup", indent=1)
             for path_glob in self.paths:
-                Logger.info(f"-> {path_glob}")
+                TealPrint.verbose(f"{path_glob}", indent=2)
                 for path in glob(path_glob):
-                    self._find_diff_files(Path(path), 1)
+                    self._find_diff_files(Path(path), 3)
 
-    def _find_diff_files(self, path: Path, level: int):
-        log_padding = "  " * level
+    def _find_diff_files(self, path: Path, indent: int):
         # File/Dir has changed
         try:
-            if path.is_symlink() or (
-                not path.is_dir() and self.is_modified_within_diff(path)
-            ):
-                Logger.debug(f"{log_padding}-> {path}", LogColors.added)
+            TealPrint.debug(f"{path}", indent=indent)
+            if path.is_symlink() or (not path.is_dir() and self.is_modified_within_diff(path)):
                 self.tar.add(path)
             # Check children
             else:
-                Logger.debug(f"{log_padding}-> {path}")
                 if not path.is_symlink():
                     for child in path.glob("*"):
-                        self._find_diff_files(child, level + 1)
+                        self._find_diff_files(child, indent + 1)
                     for child in path.glob(".*"):
-                        self._find_diff_files(child, level + 1)
+                        self._find_diff_files(child, indent + 1)
         except FileNotFoundError:
+            # Skip if we didn't find a file
             pass
 
     @property
