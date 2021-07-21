@@ -27,14 +27,15 @@ class Backups:
 
 class Mysql:
     def __init__(self) -> None:
-        self.username: Optional[str] = None
-        self.password: Optional[str] = None
+        self.username: str = ""
+        self.password: str = ""
         self.address: str = "localhost"
         self.port: int = 3306
+        self.databases: List[str] = []
 
 
 class Email:
     def __init__(self) -> None:
-        self.to_address: Optional[str] = None
-        self.from_address: Optional[str] = None
+        self.to_address: str = ""
+        self.from_address: str = ""
         self.disk_percentage: int = 85
