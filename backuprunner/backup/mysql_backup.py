@@ -40,7 +40,6 @@ class MysqlBackup(Backup):
         tar_info = tarfile.TarInfo(name=f"{name}.sql")
         tar_info.size = len(data)
         tar.addfile(tar_info, BytesIO(data))
-        pass
 
     def _get_database(self, name: Optional[str] = None) -> bytes:
         cmd = self._get_sqldump_command(name)
