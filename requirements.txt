@@ -1,2 +1,2 @@
-tealprint==0.1.0
+tealprint==0.3.0
 blulib==0.1.2
