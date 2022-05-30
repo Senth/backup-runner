@@ -18,38 +18,45 @@ class PathBackup(Backup):
 
     def run(self) -> None:
         """Add files to tar"""
-        TealPrint.info(f"Backing up {self.name}", color=attr("bold"))
+        TealPrint.info(f"Backing up {self.name}", color=attr("bold"), push_indent=True)
 
         # Full backup
         if self.part == BackupParts.full:
-            TealPrint.info(f"Doing a full backup", indent=1)
+            TealPrint.info("Doing a full backup", push_indent=True)
             for path_glob in self.paths:
-                TealPrint.verbose(f"{path_glob}", indent=2)
+                TealPrint.verbose(f"{path_glob}", push_indent=True)
                 for path in glob(path_glob):
-                    TealPrint.debug(f"{path}", indent=3)
+                    TealPrint.debug(f"{path}")
                     self.tar.add(path)
+                TealPrint.pop_indent()
+            TealPrint.pop_indent()
 
         # Diff backup
         else:
-            TealPrint.info("Doing a diff backup", indent=1)
+            TealPrint.info("Doing a diff backup", push_indent=True)
             for path_glob in self.paths:
-                TealPrint.verbose(f"{path_glob}", indent=2)
+                TealPrint.verbose(f"{path_glob}", push_indent=True)
                 for path in glob(path_glob):
-                    self._find_diff_files(Path(path), 3)
+                    self._find_diff_files(Path(path))
+                TealPrint.pop_indent()
+            TealPrint.pop_indent()
 
-    def _find_diff_files(self, path: Path, indent: int):
+        TealPrint.pop_indent()
+
+    def _find_diff_files(self, path: Path):
         # File/Dir has changed
         try:
-            TealPrint.debug(f"{path}", indent=indent)
+            TealPrint.debug(f"{path}", push_indent=True)
             if path.is_symlink() or (not path.is_dir() and self.is_modified_within_diff(path)):
                 self.tar.add(path)
             # Check children
             else:
                 if not path.is_symlink():
                     for child in path.glob("*"):
-                        self._find_diff_files(child, indent + 1)
+                        self._find_diff_files(child)
                     for child in path.glob(".*"):
-                        self._find_diff_files(child, indent + 1)
+                        self._find_diff_files(child)
+            TealPrint.pop_indent()
         except FileNotFoundError:
             # Skip if we didn't find a file
             pass

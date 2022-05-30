@@ -12,13 +12,13 @@ from ..config import config
 
 def remove_old() -> None:
     """Remove all old backups"""
-    TealPrint.info("Removing old backups", color=attr("bold"))
+    TealPrint.info("Removing old backups", color=attr("bold"), push_indent=True)
     backup_path = Path(config.general.backup_location)
     for backup in backup_path.glob("*"):
         if backup.is_file() and date_helper.is_backup_old(backup):
-            message = f"🔥 {backup}"
-            TealPrint.info(message, indent=1)
+            TealPrint.info(f"🔥 {backup}")
             remove(backup)
+    TealPrint.pop_indent()
 
 
 class BackupParts(Enum):

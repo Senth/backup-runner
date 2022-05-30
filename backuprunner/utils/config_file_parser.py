@@ -31,7 +31,7 @@ class ConfigFileParser:
         config = ConfigParser()
         config.read(self.path)
 
-        TealPrint.verbose(f"Reading configuration {self.path}", color=attr("bold"))
+        TealPrint.verbose(f"Reading configuration {self.path}", color=attr("bold"), push_indent=True)
 
         try:
             config.to_object(
@@ -82,12 +82,13 @@ class ConfigFileParser:
             ConfigFileParser._print_section_not_found("Email")
 
         self._check_required(args)
+        TealPrint.pop_indent()
 
         return args
 
     @staticmethod
     def _print_section_not_found(section: str) -> None:
-        TealPrint.warning(f"⚠ [{section}] section not found!", indent=1)
+        TealPrint.warning(f"⚠ [{section}] section not found!")
 
     def _check_required(self, args: ConfigFileArgs) -> None:
         if len(args.general.backup_location) == 0:
